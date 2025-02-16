@@ -1,0 +1,39 @@
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  is_admin BOOLEAN DEFAULT FALSE
+);
+
+-- Leads table
+CREATE TABLE IF NOT EXISTS leads (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  lead_id VARCHAR(255) NOT NULL,
+  form_id VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  status VARCHAR(50) DEFAULT 'new',
+  data JSON,
+  processed BOOLEAN DEFAULT FALSE
+);
+
+-- Notifications table
+CREATE TABLE IF NOT EXISTS notifications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  lead_id INT NOT NULL,
+  type VARCHAR(50) NOT NULL,
+  sent BOOLEAN DEFAULT FALSE,
+  error TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (lead_id) REFERENCES leads(id)
+);
+
+-- Sessions table for authentication
+CREATE TABLE IF NOT EXISTS sessions (
+  session_id VARCHAR(128) NOT NULL PRIMARY KEY,
+  expires BIGINT,
+  data TEXT
+);
